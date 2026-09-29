@@ -1,0 +1,62 @@
+{
+  "generated_by": "tools/make_calib.py",
+  "stage": "interim-ModelA-ego-frame-transfer",
+  "supersedes": "interim-ModelA-translation-only (只有横向那一个分量)",
+  "superseded_by": null,
+  "provenance": {
+    "why_translation_not_pixel_offset": "同一 +0.0507 m 在两个不同深度 (0.379 m / 0.517 m) 都让骨架落到手上; 像素位移随 1/Z 变化 => 三维平移。二维常数 (Δcx,Δcy) 无法同时拟合两个深度。",
+    "why_this_magnitude": "三个分量来自 /home/skw/git/ego 外参参考系的**换算**, 不是拟合: 它的 9 个 HDF5 跨三个采集批次外参逐位相同 => 记的是硬件常数; 与我们 header 相比基线差 0.28% (0.064068 vs 0.064247 m)、两相机相对旋转差 0.000000°, 两套参考系之间差一个 正交且 det=+1 的基变换 B≈rotz(+90°), 用 B 推原点位移时左右相机自洽到 0.22 mm (用 Bᵀ 则 128.31 mm) => 两套 header 是同一个刚体对的两种记法。设备同为 PICO 4 Ultra, 相机相对 head 的安装是硬件常数, 不是个体差异。横向分量另有像素证据独立印证 (两个深度都靠同一个平移落到手上)。",
+    "forward_component_explains_scale_residual": "Δz = −5.24 cm (相机前移) 把 0.379 m 处的深度降到 ~0.327 m, 投影放大 ~16%, 方向与量级都对得上此前记的『投影手比实际手小约 10%』。",
+    "vertical_component_is_the_untested_one": "Δy = +1.89 cm 没有任何独立症状支持, 也未被独立验证。它的可观察后果是画面内容 下移约 34 px @0.40 m。上一轮只修横向后骨架在垂直方向看着是对的 —— 若那是对的, 这一分量就是多余的。这是本次唯一可能被目视证伪的分量。",
+    "eye_assignment_verified": "视差符号判据 (带能失败的自检): 5 帧 / 2 组采集 dx ≈ −60~−66 px 恒为负 => u_L > u_R => 左半幅 = 左侧相机; 两半幅共用同一个方向的修正。",
+    "rotation_already_correct": "示意图读出绕 head X 转 180°, 与外参独立算出的 cam_X=+head_X, cam_Y=−head_Y, cam_Z=−head_Z 完全一致 => extra_R 保持单位阵。",
+    "not_yet_determined": [
+      "标定参数在两段采集上是否一致 (Step 3 §4.5)",
+      "『投影手比实际手小约 10%』假定由本次的 Δz = −5.24 cm 解释; 若渲染后仍偏小, 剩余部分要记到 f 上 (两者靠 1/Z 依赖区分: Z 偏差缩放随深度变, f 偏差不变)",
+      "『上下 +1.89 cm』无独立症状支持, 施加后画面内容应下移约 34 px @0.40 m —— 若渲染出来垂直方向反而偏了, 撤掉这一分量即可, 另两项不受影响",
+      "腕部略过冲"
+    ]
+  },
+  "evidence_files": [
+    "out/head_cam_origin.md"
+  ],
+  "params": {
+    "f": 686.868,
+    "cx": 539.5,
+    "cy": 404.5,
+    "rz_device_deg": -90.0,
+    "extrinsic_subtract_t": true,
+    "eye0_is_left_half": true,
+    "flip_head_quat": false,
+    "d_f": 0.0,
+    "d_cx": 0.0,
+    "d_cy": 0.0,
+    "extra_R": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "extra_t": [
+      0.0189,
+      -0.0505,
+      -0.0524
+    ],
+    "effective": {
+      "f": 686.868,
+      "cx": 539.5,
+      "cy": 404.5
+    }
+  }
+}

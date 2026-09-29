@@ -1,0 +1,21 @@
+{
+  "schema_version": 1, "preset": "xrpipe_mode1_rel_shared",
+  "training_config": "xrpipe_mode1_train", "state_dim": 19, "reference_dim": 9,
+  "action_dim": 10, "action_horizon": 50, "dataset_fps": 30, "model_action_dim": 32,
+  "normalization": "shared_quantile", "normalization_clip": 5.0,
+  "asset_id": "OBSERVATION_ONLY_USE_CHECKPOINT_MANIFEST_FOR_POLICY",
+  "observation_only": true,
+  "dataset_contract": {
+    "schema_version": "xrpipe_action_v1", "digest": "89f5be459788",
+    "state_dim": 19, "reference_dim": 9, "action_dim": 10,
+    "object_order": ["obj1", "obj2"], "object_categories": ["green type", "black plate"],
+    "reference_frame": "pico_world_openxr",
+    "coordinate_system": "openxr_rh_x_right_y_up_z_back",
+    "source_coordinate_system": "unity_lh_x_right_y_up_z_forward",
+    "control_point": "right_thumb_index_fingertip_midpoint",
+    "stored_action": "absolute_next_target",
+    "relative_formula": "inv(reference[t]) @ action[t+k]",
+    "training_state_transform": "per relation pose T_midpoint_object: S @ T @ S, S=diag(1,1,-1,1); current gripper is unchanged"
+  },
+  "source": "Current test/pipeline/out/lerobot/ego_all metadata. Diagnostic only; use actual checkpoint manifest for policy."
+}

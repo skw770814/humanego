@@ -1,0 +1,62 @@
+step2:
+cd /home/skw/humanego/test/work
+./tools/rel_run.sh 20260920_111300 --stage pose
+./tools/rel_run.sh 20260920_111300 --stage all
+
+
+
+step3：
+export LD_LIBRARY_PATH="$PWD/.venv/lib/python3.11/site-packages/nvidia/cublas/lib:$PWD/.venv/lib/python3.11/site-packages/nvidia/cudnn/lib:$PWD/.venv/lib/python3.11/site-packages/nvidia/cuda_runtime/lib:${LD_LIBRARY_PATH:-}"
+
+cd /home/skw/humanego/test/work
+export PYOPENGL_PLATFORM=egl
+./tools/rel_run.sh 20260920_111342 \
+  --stage step3 \
+  --lama-model /home/skw/humanego/test/work/.cache/huggingface/hub/models--Carve--LaMa-ONNX/snapshots/c3c0c9e468934d62e79c329e35d82dd09ff8c444/lama_fp32.onnx \
+  --gripper-render piper
+  （真实piper夹爪）
+  
+  ./tools/rel_run.sh 20260920_111342 \
+  --stage step3 \
+  --lama-model /home/skw/humanego/test/work/.cache/huggingface/hub/models--Carve--LaMa-ONNX/snapshots/c3c0c9e468934d62e79c329e35d82dd09ff8c444/lama_fp32.onnx \
+  --gripper-render wireframe       
+  （虚拟夹爪）
+
+cd /home/skw/humanego/test/work
+
+unset PYOPENGL_PLATFORM
+export DISPLAY=:0
+
+./tools/rel_run.sh 20260920_111300 \
+  --stage step3 \
+  --lama-model /home/skw/humanego/test/work/.cache/huggingface/hub/models--Carve--LaMa-ONNX/snapshots/c3c0c9e468934d62e79c329e35d82dd09ff8c444/lama_fp32.onnx \
+  --gripper-render piper
+  
+  
+  
+  
+  
+  
+  cd /home/skw/humanego/test/pipeline
+  bash run.sh step1 --stems 20260925_123549  --vis
+  
+  bash run.sh all --stems 20260920_111342 --dataset earphone_pick \
+     --prompt "small white earbud case" \
+     --task   "pick up the earphone case"\
+     --video-in-vram
+     
+     bash run.sh step3 --stems 20260920_111342 --vis
+     
+     
+     cd /home/skw/humanego/test/pipeline
+
+# 1) step1 —— 所有段（不写 stem 就是全部；111342 已有产物会自动跳过，只算 111300）
+bash run.sh step1 --stems 20260925_154745
+
+# 2) step2 —— 所有段，两段共用同一份物体表
+bash run.sh step2  --stems 20260925_162016,20260925_162153,20260925_162342,20260925_163014,20260925_163507,20260925_163851,20260925_163917,20260925_164013,20260925_164039 --video-in-vram  --prompt "green type|black plate"
+
+# 3) step4 —— 跳过 step3：直接解源 mp4 左半当观测
+bash run.sh step4 all  --dataset ego_all --observation step2  \
+  --task "pick up the small type and put it into the black plate"
+

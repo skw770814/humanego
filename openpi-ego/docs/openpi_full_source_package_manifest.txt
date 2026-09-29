@@ -1,0 +1,31 @@
+# OpenPI full-source transfer package
+
+Archive:
+  openpi_full_source_20260728.tar.gz
+
+Included:
+  Current repository source and configuration from:
+  - src/
+  - scripts/
+  - examples/
+  - tools/
+  - packages/
+  - third_party/ (including the required G1-D URDF and meshes)
+  - docs/
+  - root training/normalization scripts
+  - pyproject.toml, uv.lock, Python/version and repository configuration
+  - licenses and README
+
+Excluded:
+  - dataset/                         local LeRobot datasets
+  - checkpoints/                     model weights and copied checkpoint assets
+  - .venv/                           local Python environment
+  - .git/, .agents/, .codex/         local repository/agent state
+  - .pytest_cache/, .ruff_cache/     generated caches
+  - **/__pycache__/ and *.pyc        generated Python bytecode
+  - .vscode/                         machine-local editor state
+  - *.tar.gz                         previously generated transfer archives
+  - openpi/ and openpi_zh/           stale duplicate snapshots under this repository
+  - note.txt                         local notes
+
+The dependency lock file is included, but the installed environment is not.

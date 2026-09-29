@@ -1,0 +1,7 @@
+{
+  "units": "m",
+  "control_frame": "torso_link4",
+  "camera_frame": "hdas/camera_wrist_right_color_optical_frame",
+  "T_B_C": null,
+  "note": "Replace null with measured camera RGB optical -> actual TCP feedback/control reference transform. No default identity. Camera is detached from wrist."
+}

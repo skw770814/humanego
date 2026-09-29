@@ -1,0 +1,36 @@
+# Python environments and generated caches
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+**/.ruff_cache/
+*.py[cod]
+
+# Generated processing results
+**/out/
+**/output/
+**/outputs/
+
+# Recorded media and local datasets (keep test source code)
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.bag
+*.db3
+*.npy
+*.npz
+*.parquet
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+/test/trackingData_*.txt
+/test/**/.cache/
+/test/**/assets/
+/test/**/data/
+/test/**/datasets/
+
+# Local editor/agent state
+/.claude/
+/test/.claude/
+/:memory:.ses

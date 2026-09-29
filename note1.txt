@@ -1,0 +1,114 @@
+XRPipe Mode1 训练启动命令
+========================
+
+说明：
+- 数据必须由 Pipeline Step4 导出为 xrpipe_v4。
+- 训练的是 OpenXR 右手系下的单右手指尖中点相对动作。
+- camera0 是有效单目图像，两个腕部相机为零图并被 mask。
+- 以下命令需要在训练电脑上执行，请替换数据集路径。
+
+
+1. 进入 OpenPI 目录
+-------------------
+
+cd /path/to/humanego/openpi
+
+
+2. 计算归一化统计
+-----------------
+
+uv run scripts/compute_xrpipe_norm_stats.py \
+  --preset xrpipe_mode1_rel_shared \
+  --dataset /path/to/lerobot/earphone_pick
+
+
+3. 训练前检查配置
+-----------------
+
+uv run scripts/train_xrpipe.py \
+  --preset xrpipe_mode1_rel_shared \
+  --dataset /path/to/lerobot/earphone_pick \
+  --exp-name earphone_pick_mode1 \
+  --print-config
+
+
+4. 单卡训练
+-----------
+
+uv run scripts/train_xrpipe.py \
+  --preset xrpipe_mode1_rel_shared \
+  --dataset /path/to/lerobot/earphone_pick \
+  --exp-name earphone_pick_mode1 \
+  --batch-size 16 \
+  --fsdp-devices 1 \
+  --num-train-steps 30000 \
+  --num-workers 8 \
+  --save-interval 1000
+
+显存足够时，可以将 --batch-size 16 改为 --batch-size 32。
+
+
+5. 使用验证集
+-------------
+
+归一化统计和训练必须使用相同的 validation-episodes 和 split-seed。
+
+uv run scripts/compute_xrpipe_norm_stats.py \
+  --preset xrpipe_mode1_rel_shared \
+  --dataset /path/to/lerobot/earphone_pick \
+  --validation-episodes 2 \
+  --split-seed 2026
+
+uv run scripts/train_xrpipe.py \
+  --preset xrpipe_mode1_rel_shared \
+  --dataset /path/to/lerobot/earphone_pick \
+  --exp-name earphone_pick_mode1 \
+  --batch-size 16 \
+  --fsdp-devices 1 \
+  --num-train-steps 30000 \
+  --num-workers 8 \
+  --save-interval 1000 \
+  --validation-episodes 2 \
+  --split-seed 2026 \
+  --validation-interval 1000 \
+  --validation-batches 20
+
+
+6. 续训
+-------
+
+续训参数必须与原实验的数据契约和数据集拆分保持一致。
+
+uv run scripts/train_xrpipe.py \
+  --preset xrpipe_mode1_rel_shared \
+  --dataset /path/to/lerobot/earphone_pick \
+  --exp-name earphone_pick_mode1 \
+  --batch-size 16 \
+  --fsdp-devices 1 \
+  --num-train-steps 30000 \
+  --num-workers 8 \
+  --save-interval 1000 \
+  --resume
+
+
+7. 不使用 Weights & Biases
+--------------------------
+
+在训练命令末尾添加：
+
+  --no-wandb
+
+
+主要默认参数
+------------
+
+--batch-size 32
+--fsdp-devices 1
+--num-train-steps 30000
+--num-workers 8
+--save-interval 1000
+--keep-period 5000
+--seed 42
+--base-checkpoint gs://openpi-assets/checkpoints/pi05_base/params
+
+

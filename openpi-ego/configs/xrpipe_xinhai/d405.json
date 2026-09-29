@@ -1,0 +1,8 @@
+{
+  "width": 640, "height": 480,
+  "camera_frame": "hdas/camera_wrist_right_color_optical_frame",
+  "distortion_model": "plumb_bob", "depth_scale": 0.001,
+  "K": [[432.78143310546875,0,322.6611633300781],[0,432.2790832519531,239.83888244628906],[0,0,1]],
+  "D": [-0.05335243046283722,0.05950019881129265,-0.00025906061637215316,0.00025165421538986266,-0.01935521513223648],
+  "source": "User ROS aligned_depth_to_color/camera_info, 640x480; verify on deployment"
+}

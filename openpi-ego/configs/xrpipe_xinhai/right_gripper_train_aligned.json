@@ -1,0 +1,34 @@
+{
+  "units": "m",
+  "ee_frame": "right_gripper_link",
+  "axis_convention": "source_five_keypoint_analogue",
+  "profile": "right_gripper_train_aligned",
+  "derived_from": "right_gripper.json",
+  "alignment_status": "candidate_requires_physical_verification",
+  "Q_original_aligned": [
+    [-1.0, 0.0, 0.0, 0.0],
+    [0.0, 1.0, 0.0, 0.0],
+    [0.0, 0.0, -1.0, 0.0],
+    [0.0, 0.0, 0.0, 1.0]
+  ],
+  "T_E_M": [
+    [0.006606374822393895, 0.000004567434154310612, 0.999978177657315, 0.0000003578131411634489],
+    [-0.9999781776677459, 0.00000003017484048537436, 0.006606374822324983, 0.00000006146728992462158],
+    [0.0, -0.9999999999895689, 0.000004567533828551399, -0.07835501049399377],
+    [0.0, 0.0, 0.0, 1.0]
+  ],
+  "five_keypoints_E": {
+    "wrist": [0, 0, 0],
+    "thumb_base": [-0.000088709, 0.013453, -0.03689],
+    "index_base": [0.000089046, -0.013453, -0.03689],
+    "thumb_tip": [-0.00016249573763014376, 0.0009630282952189442, -0.07835502912044526],
+    "index_tip": [0.00016321136391247065, -0.000962905360639095, -0.07835499186754227]
+  },
+  "source": "Derived from the unchanged right_gripper.json: T_E_M_aligned = T_E_M_original @ Q_original_aligned. Exchange thumb/index roles for both base and tip keypoints; keep the original midpoint and Y approach axis. Q is a proper 180-degree local-Y rotation, separate from the unchanged training S reflection.",
+  "mesh_sha256": {
+    "right_gripper_finger_link1.STL": "189e318354276aa82beb27e5741f9c980bd592bb53793d8702e29c1ab5a6439b",
+    "right_gripper_finger_link2.STL": "c98c36d176ed01017f1a9f6abea2fdc722e0fc894fd21fa9d5d978315aee5b09"
+  },
+  "axes": "Aligned source analogue x=finger1/thumb base to finger2/index base (approximately -E.y), y=projected wrist-to-base-midpoint (approximately -E.z), z=cross(x,y) (approximately +E.x). X and Z are reversed relative to right_gripper.json; the midpoint and Y are unchanged.",
+  "verification_required": "Candidate alignment, not a verified hardware calibration. Inspect midpoint, approach axis and physical finger assignment at multiple poses, then rerun policy dry-run with the new state. Restart client/test after switching profiles. Roll back with --tcp-geometry configs/xrpipe_xinhai/right_gripper.json."
+}

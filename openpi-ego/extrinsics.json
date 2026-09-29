@@ -1,0 +1,7 @@
+{
+  "units": "m",
+  "control_frame": "torso_link4",
+  "camera_frame": "hdas/camera_wrist_right_color_optical_frame",
+  "T_B_C": null,
+  "note": "Default path for XRPipe inference. Replace null with the measured 4x4 RGB optical -> actual TCP control reference transform; or pass --extrinsics PATH. Camera was detached from wrist."
+}

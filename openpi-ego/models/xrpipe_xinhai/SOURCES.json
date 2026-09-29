@@ -1,0 +1,15 @@
+{
+  "offline_only": true,
+  "dino": {
+    "source": "test/pipeline/.cache/huggingface/hub/models--IDEA-Research--grounding-dino-tiny/snapshots/a2bb814dd30d776dcf7e30523b00659f4f141c71",
+    "destination": "grounding-dino-tiny",
+    "model_sha256": "1a2412ef99bd74bcd3c2a246fa1e48581f8889a1300c9051974741314fc042f3"
+  },
+  "sam2": {
+    "source": "test/pipeline/.cache/huggingface/hub/models--facebook--sam2-hiera-tiny/snapshots/7c218beaf0bb87874785f32b582f640134fc1c09",
+    "destination": "sam2_hiera_tiny.pt",
+    "config": "configs/sam2/sam2_hiera_t.yaml",
+    "model_sha256": "65b50056e05bcb13694174f51bb6da89c894b57b75ccdf0ba6352c597c5d1125"
+  },
+  "note": "Dereferenced copies, not links into test cache. Same tiny models as test/pipeline/config/DINOSAM.yaml."
+}

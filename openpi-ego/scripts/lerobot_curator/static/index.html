@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LeRobot Curator</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div>
+            <p>DATA REVIEW STUDIO</p>
+            <h1>LeRobot Curator</h1>
+          </div>
+        </div>
+        <div class="dataset-heading">
+          <div class="connection-dot"></div>
+          <div>
+            <strong id="dataset-name">正在读取数据集…</strong>
+            <span id="dataset-path"></span>
+          </div>
+        </div>
+        <button class="primary-button" id="open-export">导出已保留数据</button>
+      </header>
+
+      <aside class="sidebar">
+        <section class="progress-card">
+          <div class="progress-heading">
+            <span>筛选进度</span>
+            <strong id="review-progress">0%</strong>
+          </div>
+          <div class="progress-track"><div id="progress-fill"></div></div>
+          <div class="count-grid">
+            <div><b id="keep-count">0</b><span>保留</span></div>
+            <div><b id="reject-count">0</b><span>排除</span></div>
+            <div><b id="undecided-count">0</b><span>未处理</span></div>
+          </div>
+        </section>
+
+        <section class="episode-tools">
+          <label class="jump-field">
+            <span>定位回合</span>
+            <div><input id="jump-input" type="number" min="0" placeholder="Episode ID" /><button id="jump-button">跳转</button></div>
+          </label>
+          <div class="filter-tabs" id="filter-tabs">
+            <button class="active" data-filter="all">全部</button>
+            <button data-filter="undecided">未处理</button>
+            <button data-filter="keep">保留</button>
+            <button data-filter="reject">排除</button>
+          </div>
+        </section>
+
+        <div class="episode-list-heading">
+          <span>回合列表</span>
+          <small id="filtered-count">0 条</small>
+        </div>
+        <nav class="episode-list" id="episode-list" aria-label="Episode list"></nav>
+      </aside>
+
+      <main class="workspace">
+        <section class="episode-header">
+          <div>
+            <div class="eyebrow">CURRENT EPISODE</div>
+            <div class="episode-title-line">
+              <h2>Episode <span id="episode-index">—</span></h2>
+              <span class="status-pill undecided" id="status-pill">未处理</span>
+            </div>
+            <p id="task-name">—</p>
+          </div>
+          <div class="episode-metrics">
+            <div><span>帧数</span><strong id="frame-count">—</strong></div>
+            <div><span>时长</span><strong id="duration-value">—</strong></div>
+            <div><span>帧率</span><strong id="fps-value">—</strong></div>
+            <div><span>裁剪起点</span><strong id="trim-value">未设置</strong></div>
+          </div>
+        </section>
+
+        <section class="video-panel">
+          <div class="video-grid" id="video-grid">
+            <div class="video-placeholder">正在准备视频播放器…</div>
+          </div>
+          <div class="transport">
+            <div class="transport-row">
+              <button class="icon-button" id="previous-episode" title="上一个回合（←）">←</button>
+              <button class="play-button" id="play-toggle" title="播放/暂停（空格）">
+                <span id="play-icon">▶</span>
+              </button>
+              <button class="icon-button" id="next-episode" title="下一个回合（→）">→</button>
+              <span class="time-readout"><b id="current-time">00:00.0</b><i>/</i><span id="total-time">00:00.0</span></span>
+              <input id="timeline" class="timeline" type="range" min="0" max="1000" value="0" aria-label="视频进度" />
+              <div class="speed-control">
+                <span>倍速</span>
+                <select id="speed-select" aria-label="播放倍速">
+                  <option value="0.25">0.25×</option>
+                  <option value="0.5">0.5×</option>
+                  <option value="1" selected>1×</option>
+                  <option value="1.5">1.5×</option>
+                  <option value="2">2×</option>
+                  <option value="4">4×</option>
+                </select>
+              </div>
+            </div>
+            <div class="transport-row trim-row">
+              <span class="trim-label">裁剪起点</span>
+              <button class="icon-button" id="trim-back" title="后退一帧（,）">‹帧</button>
+              <button class="icon-button" id="trim-forward" title="前进一帧（.）">帧›</button>
+              <button class="chip-button" id="set-trim" title="把当前播放位置设为起点（S）">设为起点 (S)</button>
+              <button class="chip-button" id="goto-trim" title="跳到已设起点（G）">跳到起点 (G)</button>
+              <button class="chip-button ghost" id="clear-trim" title="清除起点（D）">清除 (D)</button>
+              <span class="trim-seconds-field">
+                <input id="trim-seconds" type="number" min="0" step="0.1" placeholder="秒" title="按秒设置起点" />
+                <button class="chip-button ghost" id="set-trim-seconds" title="用左侧秒数设为起点">按秒设</button>
+              </span>
+              <span class="trim-readout" id="trim-readout">当前帧 0 · 未设置起点</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="review-panel">
+          <div class="decision-group">
+            <button class="decision keep" id="mark-keep"><span>✓</span><div><b>保留这个回合</b><small>快捷键 K</small></div></button>
+            <button class="decision reject" id="mark-reject"><span>×</span><div><b>排除这个回合</b><small>快捷键 X</small></div></button>
+            <button class="decision reset" id="mark-undecided"><span>↺</span><div><b>重置标记</b><small>快捷键 U</small></div></button>
+          </div>
+          <label class="note-field">
+            <span>备注（自动保存）</span>
+            <textarea id="episode-note" rows="2" placeholder="例如：左手遮挡、动作失败、画面抖动…"></textarea>
+          </label>
+          <label class="auto-next"><input id="auto-next" type="checkbox" checked /><span>标记后自动进入下一个未处理回合</span></label>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="export-dialog">
+      <form method="dialog" class="dialog-card" id="export-form">
+        <div class="dialog-heading">
+          <div><span>BUILD DATASET</span><h2>导出筛选结果</h2></div>
+          <button class="close-button" value="cancel" aria-label="关闭">×</button>
+        </div>
+        <p class="dialog-summary">将 <strong id="export-count">0</strong> 个“保留”回合重编号，按各自的裁剪起点删除开头帧，重编码对齐视频，生成可训练的 LeRobot v2.1 数据集。其中 <strong id="export-trim-count">0</strong> 个设置了裁剪起点。</p>
+        <label class="dialog-field"><span>输出目录</span><input id="output-path" required /></label>
+        <div class="dialog-field-row">
+          <label class="dialog-field"><span>并行度（ffmpeg 进程数）</span><input id="export-jobs" type="number" min="1" placeholder="自动 = CPU 核数" /></label>
+          <label class="dialog-field"><span>CRF（画质，越小越清晰）</span><input id="export-crf" type="number" min="0" max="63" value="20" /></label>
+        </div>
+        <fieldset>
+          <legend>视频编码</legend>
+          <label><input type="radio" name="export-codec" value="h264" checked /><div><b>H.264（推荐，最快）</b><small>多进程并行重编码；同时在输出目录旁写出 <code>.trim_spec.csv</code>。</small></div></label>
+          <label><input type="radio" name="export-codec" value="av1" /><div><b>AV1（保持原编码，较慢）</b><small>与源数据一致，但 libaom 编码明显更慢。</small></div></label>
+        </fieldset>
+        <div class="dialog-warning" id="export-warning"></div>
+        <div class="dialog-actions">
+          <button value="cancel" class="secondary-button">取消</button>
+          <button type="button" class="primary-button" id="run-export">开始导出</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status"></div>
+    <script src="/app.js"></script>
+  </body>
+</html>
